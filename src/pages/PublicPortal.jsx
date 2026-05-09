@@ -69,25 +69,32 @@ function PublicPortal() {
         )}
       </main>
 
-      {/* Task Detail Modal */}
+      {/* Task Preview Modal - Renders HTML as live output */}
       {selectedTask && (
         <div className="modal-overlay" onClick={closeModal}>
-          <div className="modal-content glass-panel" onClick={e => e.stopPropagation()}>
-            <button className="modal-close" onClick={closeModal}>×</button>
-            <div className="modal-body">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                <span className="task-date" style={{ fontSize: '1rem' }}>{selectedTask.date}</span>
+          <div className="modal-content glass-panel modal-fullscreen" onClick={e => e.stopPropagation()}>
+            <div className="modal-topbar">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <h2 style={{ margin: 0, fontSize: '1.2rem' }}>{selectedTask.title}</h2>
                 <span className={`task-difficulty difficulty-${selectedTask.difficulty.toLowerCase()}`}>
                   {selectedTask.difficulty}
                 </span>
               </div>
-              <h2>{selectedTask.title}</h2>
-              <p>{selectedTask.description}</p>
-              
-              <h3 style={{ marginBottom: '1rem', color: 'var(--text-primary)' }}>Task Instructions:</h3>
-              <div className="code-block">
-                {selectedTask.content}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <span className="task-date">{selectedTask.date}</span>
+                <button className="modal-close" onClick={closeModal} style={{ position: 'static' }}>×</button>
               </div>
+            </div>
+            {selectedTask.description && (
+              <p style={{ padding: '0 1.5rem', color: 'var(--text-secondary)', margin: '0.5rem 0' }}>{selectedTask.description}</p>
+            )}
+            <div className="preview-container">
+              <iframe
+                srcDoc={selectedTask.content}
+                title={selectedTask.title}
+                className="preview-iframe"
+                sandbox="allow-same-origin"
+              />
             </div>
           </div>
         </div>
