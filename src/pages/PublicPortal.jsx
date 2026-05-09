@@ -51,8 +51,8 @@ function PublicPortal() {
       <Header />
       <main>
         <div style={{ marginBottom: '2rem' }}>
-          <h2 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Daily Student Tasks</h2>
-          <p style={{ color: 'var(--text-secondary)' }}>Browse and manage your assigned practice tasks below.</p>
+          <h2 style={{ fontSize: '1.4rem', marginBottom: '0.3rem' }}>Daily Student Tasks</h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Browse and manage your assigned practice tasks below.</p>
         </div>
 
         {error && <div className="error-banner"><p>{error}</p></div>}
