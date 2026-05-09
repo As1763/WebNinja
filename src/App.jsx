@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import PublicPortal from './pages/PublicPortal';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
+import TaskView from './pages/TaskView';
 import './index.css';
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
       <div className="app-container">
         <Routes>
           <Route path="/" element={<PublicPortal />} />
+          <Route path="/task/:taskId" element={<TaskView />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/login" element={<AdminLogin />} />
           <Route path="*" element={<Navigate to="/" />} />

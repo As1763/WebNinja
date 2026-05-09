@@ -385,17 +385,95 @@ label {
 }
 
 /* ==============================
+   TASK VIEW PAGE (Separate Page)
+   ============================== */
+.task-view-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.task-view-page .header {
+  margin-bottom: 0;
+  border-radius: 0;
+}
+
+.task-info-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 2rem;
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+  flex-shrink: 0;
+}
+
+.task-info-left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.task-info-details h2 {
+  font-size: 1.1rem;
+  margin-bottom: 0.15rem;
+}
+
+.task-info-details p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.task-info-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-primary);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  flex-shrink: 0;
+}
+
+.btn-back:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.task-preview-wrapper {
+  flex: 1;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.task-preview-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* ==============================
    RESPONSIVE
    ============================== */
 @media (max-width: 768px) {
   .task-grid {
     grid-template-columns: 1fr;
-  }
-
-  .modal-fullscreen {
-    width: 100vw;
-    height: 100vh;
-    border-radius: 0;
   }
 
   main {
@@ -404,5 +482,22 @@ label {
 
   .header {
     padding: 1rem;
+  }
+
+  .task-info-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.8rem 1rem;
+  }
+
+  .task-info-left {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .task-preview-wrapper {
+    padding: 0.5rem;
   }
 }

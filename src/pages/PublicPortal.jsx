@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { ref, get } from 'firebase/database';
 import { db } from '../firebase';
+import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import TaskList from '../components/TaskList';
 
 function PublicPortal() {
-  const [selectedTask, setSelectedTask] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -41,8 +42,9 @@ function PublicPortal() {
     fetchTasks();
   }, []);
 
-  const handleTaskSelect = (task) => setSelectedTask(task);
-  const closeModal = () => setSelectedTask(null);
+  const handleTaskSelect = (task) => {
+    navigate(`/task/${task.id}`);
+  };
 
   return (
     <>
@@ -68,37 +70,6 @@ function PublicPortal() {
           <TaskList tasks={tasks} onTaskSelect={handleTaskSelect} />
         )}
       </main>
-
-      {/* Task Preview Modal - Renders HTML as live output */}
-      {selectedTask && (
-        <div className="modal-overlay" onClick={closeModal}>
-          <div className="modal-content glass-panel modal-fullscreen" onClick={e => e.stopPropagation()}>
-            <div className="modal-topbar">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <h2 style={{ margin: 0, fontSize: '1.2rem' }}>{selectedTask.title}</h2>
-                <span className={`task-difficulty difficulty-${selectedTask.difficulty.toLowerCase()}`}>
-                  {selectedTask.difficulty}
-                </span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <span className="task-date">{selectedTask.date}</span>
-                <button className="modal-close" onClick={closeModal} style={{ position: 'static' }}>×</button>
-              </div>
-            </div>
-            {selectedTask.description && (
-              <p style={{ padding: '0 1.5rem', color: 'var(--text-secondary)', margin: '0.5rem 0' }}>{selectedTask.description}</p>
-            )}
-            <div className="preview-container">
-              <iframe
-                srcDoc={selectedTask.content}
-                title={selectedTask.title}
-                className="preview-iframe"
-                sandbox="allow-same-origin"
-              />
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 }
