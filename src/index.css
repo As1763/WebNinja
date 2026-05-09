@@ -121,6 +121,8 @@ main {
   cursor: pointer;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .task-card::before {
@@ -212,6 +214,8 @@ main {
   font-weight: 500;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
+  margin-top: auto;
+  align-self: flex-end;
 }
 
 .btn-view:hover {
