@@ -39,7 +39,7 @@ function AdminDashboard() {
     };
   }, [navigate]);
 
-  const fetchTasks = async () => {
+  async function fetchTasks() {
     if (!db) return;
     setLoading(true);
     try {
@@ -54,7 +54,7 @@ function AdminDashboard() {
       console.error("Error fetching tasks:", error);
     }
     setLoading(false);
-  };
+  }
 
   const handleAddTask = async (e) => {
     e.preventDefault();
