@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Preview</title>
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; overflow: auto; }
+    </style>
+</head>
+<body>
+    <div id="content-root"></div>
+    <script>
+        // Listen for content from the parent window
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'SET_CONTENT') {
+                const content = event.data.content;
+                
+                // We use document.write to completely replace the document 
+                // while keeping the same-origin URL (/preview.html)
+                // This ensures CSS isolation AND allows browser extensions to work.
+                document.open();
+                document.write(content);
+                document.close();
+            }
+        });
+
+        // Notify parent that we are ready
+        window.parent.postMessage({ type: 'FRAME_READY' }, '*');
+    </script>
+</body>
+</html>

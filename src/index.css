@@ -405,6 +405,14 @@ label {
 /* ==============================
    TASK FULLSCREEN VIEW
    ============================== */
+.fullscreen-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+  background: transparent;
+}
+
 .task-fullscreen {
   position: fixed;
   top: 0;
@@ -413,23 +421,6 @@ label {
   height: 100vh;
   z-index: 9999;
   background: #ffffff;
-}
-
-.fullscreen-iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  display: block;
-}
-
-.task-direct-view {
-  min-height: 100vh;
-  background: #fff; /* Default background if task doesn't have one */
-}
-
-.task-rendered-content {
-  width: 100%;
-  min-height: 100vh;
 }
 
 .fab-back {

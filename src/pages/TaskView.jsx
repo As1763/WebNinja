@@ -73,8 +73,31 @@ function TaskView() {
     );
   }
 
+  const iframeRef = import('react').then(m => m.useRef(null)); // Using a ref for the iframe
+  const [frameReady, setFrameReady] = useState(false);
+
+  useEffect(() => {
+    const handleMessage = (event) => {
+      if (event.data.type === 'FRAME_READY') {
+        setFrameReady(true);
+      }
+    };
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
+  useEffect(() => {
+    if (frameReady && task && document.getElementById('task-frame')) {
+      const iframe = document.getElementById('task-frame');
+      iframe.contentWindow.postMessage({
+        type: 'SET_CONTENT',
+        content: task.content
+      }, '*');
+    }
+  }, [frameReady, task]);
+
   return (
-    <div className="task-direct-view">
+    <div className="task-fullscreen">
       {/* Floating Back Button - Auto hides */}
       <button 
         className={`fab-back ${showControls ? 'visible' : 'hidden'}`} 
@@ -105,10 +128,13 @@ function TaskView() {
       {/* Hover zone to bring back the info bar */}
       <div className="top-hover-zone" onMouseEnter={() => setShowControls(true)} style={{ zIndex: 10001 }} />
 
-      {/* Direct HTML Rendering - This allows WhatFont extension to work! */}
-      <div 
-        className="task-rendered-content"
-        dangerouslySetInnerHTML={{ __html: task.content }}
+      {/* Full screen iframe using same-origin shell - Isolation + Extension support! */}
+      <iframe
+        id="task-frame"
+        src="/preview.html"
+        title={task.title}
+        className="fullscreen-iframe"
+        style={{ width: '100%', height: '100%', border: 'none' }}
       />
     </div>
   );
