@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs, orderBy, query } from 'firebase/firestore';
+import { ref, get } from 'firebase/database';
 import { db } from '../firebase';
 import Header from '../components/Header';
 import TaskList from '../components/TaskList';
@@ -19,13 +19,15 @@ function PublicPortal() {
           return;
         }
 
-        const q = query(collection(db, "tasks"), orderBy("createdAt", "desc"));
-        const querySnapshot = await getDocs(q);
-        
+        const snapshot = await get(ref(db, "tasks"));
         const fetchedTasks = [];
-        querySnapshot.forEach((doc) => {
-          fetchedTasks.push({ id: doc.id, ...doc.data() });
-        });
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          for (let id in data) {
+            fetchedTasks.push({ id, ...data[id] });
+          }
+          fetchedTasks.sort((a, b) => b.createdAt - a.createdAt);
+        }
         
         setTasks(fetchedTasks);
         setLoading(false);

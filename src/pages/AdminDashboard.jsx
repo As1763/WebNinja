@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, addDoc, getDocs, deleteDoc, doc, serverTimestamp, orderBy, query } from 'firebase/firestore';
+import { ref, push, set, remove, get } from 'firebase/database';
 import { auth, db } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 
@@ -43,12 +43,15 @@ function AdminDashboard() {
     if (!db) return;
     setLoading(true);
     try {
-      const q = query(collection(db, "tasks"), orderBy("createdAt", "desc"));
-      const querySnapshot = await getDocs(q);
+      const snapshot = await get(ref(db, "tasks"));
       const fetchedTasks = [];
-      querySnapshot.forEach((doc) => {
-        fetchedTasks.push({ id: doc.id, ...doc.data() });
-      });
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        for (let id in data) {
+          fetchedTasks.push({ id, ...data[id] });
+        }
+        fetchedTasks.sort((a, b) => b.createdAt - a.createdAt);
+      }
       setTasks(fetchedTasks);
     } catch (error) {
       console.error("Error fetching tasks:", error);
@@ -64,13 +67,14 @@ function AdminDashboard() {
     }
     
     try {
-      await addDoc(collection(db, "tasks"), {
+      const newTaskRef = push(ref(db, "tasks"));
+      await set(newTaskRef, {
         title,
         date,
         difficulty,
         description,
         content,
-        createdAt: serverTimestamp()
+        createdAt: Date.now()
       });
       // Reset form
       setTitle('');
@@ -88,7 +92,7 @@ function AdminDashboard() {
   const handleDeleteTask = async (id) => {
     if (window.confirm("Are you sure you want to delete this task?")) {
       try {
-        await deleteDoc(doc(db, "tasks", id));
+        await remove(ref(db, `tasks/${id}`));
         fetchTasks();
       } catch (error) {
         console.error("Error deleting task:", error);

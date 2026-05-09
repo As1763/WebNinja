@@ -1,10 +1,11 @@
 import { initializeApp, getApps } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getDatabase } from "firebase/database";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDOQf-0uaCjpqeMwSa2PPSZ9tMja5KwvTY",
   authDomain: "webninja-aa109.firebaseapp.com",
+  databaseURL: "https://webninja-aa109-default-rtdb.firebaseio.com",
   projectId: "webninja-aa109",
   storageBucket: "webninja-aa109.firebasestorage.app",
   messagingSenderId: "324735521325",
@@ -21,7 +22,7 @@ try {
     app = getApps()[0]; // Use existing app
   }
   auth = getAuth(app);
-  db = getFirestore(app);
+  db = getDatabase(app);
 } catch (error) {
   console.error("Firebase Initialization Error:", error);
 }
