@@ -40,16 +40,26 @@ body::before {
   width: 200%;
   height: 200%;
   background: radial-gradient(circle at 20% 50%, rgba(108, 43, 217, 0.08) 0%, transparent 50%),
-              radial-gradient(circle at 80% 20%, rgba(138, 43, 226, 0.06) 0%, transparent 50%),
-              radial-gradient(circle at 50% 80%, rgba(88, 28, 180, 0.05) 0%, transparent 50%);
+    radial-gradient(circle at 80% 20%, rgba(138, 43, 226, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(88, 28, 180, 0.05) 0%, transparent 50%);
   z-index: -1;
   animation: bgShift 20s ease-in-out infinite;
 }
 
 @keyframes bgShift {
-  0%, 100% { transform: translate(0, 0); }
-  33% { transform: translate(-2%, 1%); }
-  66% { transform: translate(1%, -2%); }
+
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  33% {
+    transform: translate(-2%, 1%);
+  }
+
+  66% {
+    transform: translate(1%, -2%);
+  }
 }
 
 /* ==============================
@@ -101,7 +111,7 @@ main {
    ============================== */
 .task-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 1rem;
 }
 
@@ -228,8 +238,13 @@ main {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .modal-fullscreen {
@@ -320,7 +335,9 @@ main {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ==============================
