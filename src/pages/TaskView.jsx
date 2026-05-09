@@ -25,26 +25,18 @@ function TaskView() {
     fetchTask();
   }, [taskId]);
 
-  // Unified Auto-hide logic for all controls (Back button + Info pill)
+  // Auto-hide controls after 2 seconds of inactivity
   useEffect(() => {
     let timer;
-    
     const resetTimer = () => {
       setShowControls(true);
       clearTimeout(timer);
-      timer = setTimeout(() => {
-        setShowControls(false);
-      }, 2000); // Hide after 2 seconds
+      timer = setTimeout(() => setShowControls(false), 2000);
     };
-
-    // Initial timer
     timer = setTimeout(() => setShowControls(false), 2000);
-
-    // Activity listeners
     window.addEventListener('mousemove', resetTimer);
     window.addEventListener('scroll', resetTimer, true);
     window.addEventListener('touchstart', resetTimer);
-
     return () => {
       clearTimeout(timer);
       window.removeEventListener('mousemove', resetTimer);
@@ -73,20 +65,13 @@ function TaskView() {
     );
   }
 
-  useEffect(() => {
-    if (task) {
-      localStorage.setItem('task_preview_content', task.content);
-    }
-  }, [task]);
-
   return (
     <div className="task-fullscreen">
-      {/* Floating Back Button - Auto hides */}
+      {/* Floating Back Button */}
       <button 
         className={`fab-back ${showControls ? 'visible' : 'hidden'}`} 
         onClick={() => navigate('/')} 
         title="Back to Tasks"
-        style={{ zIndex: 10002 }}
       >
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <line x1="19" y1="12" x2="5" y2="12"></line>
@@ -94,11 +79,10 @@ function TaskView() {
         </svg>
       </button>
 
-      {/* Floating info pill - Auto hides */}
+      {/* Floating info pill */}
       <div 
         className={`floating-info ${showControls ? 'visible' : ''}`}
         onMouseEnter={() => setShowControls(true)}
-        style={{ zIndex: 10002 }}
       >
         <div className="fi-main">
           <span className="fi-title">{task.title}</span>
@@ -108,19 +92,15 @@ function TaskView() {
         </div>
       </div>
 
-      {/* Hover zone to bring back the info bar */}
-      <div className="top-hover-zone" onMouseEnter={() => setShowControls(true)} style={{ zIndex: 10001 }} />
+      {/* Hover zone */}
+      <div className="top-hover-zone" onMouseEnter={() => setShowControls(true)} />
 
-      {/* Full screen iframe using same-origin shell - Isolation + Extension support! */}
-      {task && (
-        <iframe
-          id="task-frame"
-          src="/preview.html"
-          title={task.title}
-          className="fullscreen-iframe"
-          style={{ width: '100%', height: '100%', border: 'none' }}
-        />
-      )}
+      {/* Full screen preview - srcDoc gives perfect original view */}
+      <iframe
+        srcDoc={task.content}
+        title={task.title}
+        className="fullscreen-iframe"
+      />
     </div>
   );
 }
