@@ -7,7 +7,7 @@ const Header = () => {
         <h1>CodeNode</h1>
       </div>
       <div className="nav">
-        <span style={{ color: 'var(--text-secondary)' }}>Welcome, Admin</span>
+        <span style={{ color: 'var(--text-secondary)' }}>Welcome, Students</span>
       </div>
     </header>
   );
