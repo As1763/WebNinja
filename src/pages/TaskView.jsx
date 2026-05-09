@@ -8,7 +8,7 @@ function TaskView() {
   const navigate = useNavigate();
   const [task, setTask] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showBar, setShowBar] = useState(true);
+  const [showControls, setShowControls] = useState(true);
 
   useEffect(() => {
     const fetchTask = async () => {
@@ -25,12 +25,33 @@ function TaskView() {
     fetchTask();
   }, [taskId]);
 
-  // Auto-hide bar after 3 seconds
+  // Unified Auto-hide logic for all controls (Back button + Info pill)
   useEffect(() => {
-    if (!showBar) return;
-    const timer = setTimeout(() => setShowBar(false), 4000);
-    return () => clearTimeout(timer);
-  }, [showBar]);
+    let timer;
+    
+    const resetTimer = () => {
+      setShowControls(true);
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        setShowControls(false);
+      }, 2000); // Hide after 2 seconds
+    };
+
+    // Initial timer
+    timer = setTimeout(() => setShowControls(false), 2000);
+
+    // Activity listeners
+    window.addEventListener('mousemove', resetTimer);
+    window.addEventListener('scroll', resetTimer, true);
+    window.addEventListener('touchstart', resetTimer);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('mousemove', resetTimer);
+      window.removeEventListener('scroll', resetTimer, true);
+      window.removeEventListener('touchstart', resetTimer);
+    };
+  }, []);
 
   if (loading) {
     return (
@@ -54,18 +75,22 @@ function TaskView() {
 
   return (
     <div className="task-fullscreen">
-      {/* Floating Back Button - always visible */}
-      <button className="fab-back" onClick={() => navigate('/')} title="Back to Tasks">
+      {/* Floating Back Button - Auto hides */}
+      <button 
+        className={`fab-back ${showControls ? 'visible' : 'hidden'}`} 
+        onClick={() => navigate('/')} 
+        title="Back to Tasks"
+      >
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <line x1="19" y1="12" x2="5" y2="12"></line>
           <polyline points="12 19 5 12 12 5"></polyline>
         </svg>
       </button>
 
-      {/* Floating info pill - auto hides, reappears on hover over top */}
+      {/* Floating info pill - Auto hides */}
       <div 
-        className={`floating-info ${showBar ? 'visible' : ''}`}
-        onMouseEnter={() => setShowBar(true)}
+        className={`floating-info ${showControls ? 'visible' : ''}`}
+        onMouseEnter={() => setShowControls(true)}
       >
         <span className="fi-title">{task.title}</span>
         <span className={`task-difficulty difficulty-${task.difficulty.toLowerCase()}`}>
@@ -74,7 +99,7 @@ function TaskView() {
       </div>
 
       {/* Hover zone to bring back the info bar */}
-      <div className="top-hover-zone" onMouseEnter={() => setShowBar(true)} />
+      <div className="top-hover-zone" onMouseEnter={() => setShowControls(true)} />
 
       {/* Full screen iframe - NO borders, NO padding, pure website feel */}
       <iframe

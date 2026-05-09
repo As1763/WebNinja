@@ -422,7 +422,6 @@ label {
   display: block;
 }
 
-/* Floating Back Button */
 .fab-back {
   position: fixed;
   top: 16px;
@@ -440,11 +439,23 @@ label {
   justify-content: center;
   cursor: pointer;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s, box-shadow 0.2s, opacity 0.4s;
   opacity: 0.7;
 }
 
-.fab-back:hover {
+.fab-back.hidden {
+  opacity: 0;
+  transform: scale(0.8);
+  pointer-events: none;
+}
+
+.fab-back.visible {
+  opacity: 0.7;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+.fab-back.visible:hover {
   transform: scale(1.1);
   background: rgba(138, 43, 226, 0.9);
   box-shadow: 0 4px 25px rgba(138, 43, 226, 0.5);
