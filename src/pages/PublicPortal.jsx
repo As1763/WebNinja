@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+// Force redeploy - ensuring all UI changes are synced
 import { ref, get } from 'firebase/database';
 import { db } from '../firebase';
 import { useNavigate } from 'react-router-dom';
