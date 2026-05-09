@@ -73,6 +73,22 @@ function TaskView() {
     );
   }
 
+  // Function to extract font-family from the task HTML/CSS
+  const getFontUsed = (content) => {
+    if (!content) return 'Standard';
+    // Look for font-family in CSS or style attributes
+    const match = content.match(/font-family:\s*['"]?([^'";,]+)/i);
+    if (match && match[1]) {
+      return match[1].trim().split(',')[0].replace(/['"]/g, '');
+    }
+    // Check for old school <font face="...">
+    const fontTagMatch = content.match(/face=['"]?([^'"]+)/i);
+    if (fontTagMatch && fontTagMatch[1]) {
+      return fontTagMatch[1].trim();
+    }
+    return 'Default Sans';
+  };
+
   return (
     <div className="task-fullscreen">
       {/* Floating Back Button - Auto hides */}
@@ -92,10 +108,21 @@ function TaskView() {
         className={`floating-info ${showControls ? 'visible' : ''}`}
         onMouseEnter={() => setShowControls(true)}
       >
-        <span className="fi-title">{task.title}</span>
-        <span className={`task-difficulty difficulty-${task.difficulty.toLowerCase()}`}>
-          {task.difficulty}
-        </span>
+        <div className="fi-main">
+          <span className="fi-title">{task.title}</span>
+          <span className={`task-difficulty difficulty-${task.difficulty.toLowerCase()}`}>
+            {task.difficulty}
+          </span>
+        </div>
+        <div className="fi-divider"></div>
+        <div className="fi-font">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="4 7 4 4 20 4 20 7"></polyline>
+            <line x1="9" y1="20" x2="15" y2="20"></line>
+            <line x1="12" y1="4" x2="12" y2="20"></line>
+          </svg>
+          <span>{getFontUsed(task.content)}</span>
+        </div>
       </div>
 
       {/* Hover zone to bring back the info bar */}

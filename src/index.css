@@ -529,10 +529,40 @@ label {
   pointer-events: auto;
 }
 
+.fi-main {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
 .fi-title {
   color: #fff;
   font-weight: 600;
   font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.fi-divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  margin: 0 0.5rem;
+}
+
+.fi-font {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--accent-secondary);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.fi-font span {
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
