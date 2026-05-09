@@ -73,20 +73,9 @@ function TaskView() {
     );
   }
 
-  const handleIframeLoad = () => {
-    if (task && document.getElementById('task-frame')) {
-      const iframe = document.getElementById('task-frame');
-      iframe.contentWindow.postMessage({
-        type: 'SET_CONTENT',
-        content: task.content
-      }, '*');
-    }
-  };
-
   useEffect(() => {
-    // Also try to send if task loads after iframe
-    if (task && document.getElementById('task-frame')) {
-      handleIframeLoad();
+    if (task) {
+      localStorage.setItem('task_preview_content', task.content);
     }
   }, [task]);
 
@@ -123,14 +112,15 @@ function TaskView() {
       <div className="top-hover-zone" onMouseEnter={() => setShowControls(true)} style={{ zIndex: 10001 }} />
 
       {/* Full screen iframe using same-origin shell - Isolation + Extension support! */}
-      <iframe
-        id="task-frame"
-        src="/preview.html"
-        onLoad={handleIframeLoad}
-        title={task.title}
-        className="fullscreen-iframe"
-        style={{ width: '100%', height: '100%', border: 'none' }}
-      />
+      {task && (
+        <iframe
+          id="task-frame"
+          src="/preview.html"
+          title={task.title}
+          className="fullscreen-iframe"
+          style={{ width: '100%', height: '100%', border: 'none' }}
+        />
+      )}
     </div>
   );
 }

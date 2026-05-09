@@ -3,29 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Task Preview</title>
-    <style>
-        body, html { margin: 0; padding: 0; height: 100%; overflow: auto; }
-    </style>
 </head>
 <body>
-    <div id="content-root"></div>
     <script>
-        // Listen for content from the parent window
-        window.addEventListener('message', function(event) {
-            if (event.data && event.data.type === 'SET_CONTENT') {
-                const content = event.data.content;
-                
-                // We use document.write to completely replace the document 
-                // while keeping the same-origin URL (/preview.html)
-                // This ensures CSS isolation AND allows browser extensions to work.
+        try {
+            // Read content from localStorage set by parent
+            const content = localStorage.getItem('task_preview_content');
+            if (content) {
                 document.open();
                 document.write(content);
                 document.close();
+            } else {
+                document.body.innerHTML = '<div style="font-family:sans-serif; padding:20px; color:#666;">Waiting for task content...</div>';
             }
-        });
-
-        // Notify parent that we are ready
-        window.parent.postMessage({ type: 'FRAME_READY' }, '*');
+        } catch (e) {
+            console.error("Error loading task content:", e);
+            document.body.innerHTML = 'Error loading task preview.';
+        }
     </script>
 </body>
 </html>
