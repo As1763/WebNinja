@@ -25,14 +25,20 @@
 }
 
 body {
+  margin: 0;
+  padding: 0;
+}
+
+.portal-theme {
   font-family: 'Outfit', sans-serif;
   background: var(--bg-primary);
   color: var(--text-primary);
   min-height: 100vh;
   overflow-x: hidden;
+  position: relative;
 }
 
-body::before {
+.portal-theme::before {
   content: '';
   position: fixed;
   top: -50%;
@@ -47,19 +53,9 @@ body::before {
 }
 
 @keyframes bgShift {
-
-  0%,
-  100% {
-    transform: translate(0, 0);
-  }
-
-  33% {
-    transform: translate(-2%, 1%);
-  }
-
-  66% {
-    transform: translate(1%, -2%);
-  }
+  0%, 100% { transform: translate(0, 0); }
+  33% { transform: translate(-2%, 1%); }
+  66% { transform: translate(1%, -2%); }
 }
 
 /* ==============================
@@ -426,6 +422,16 @@ label {
   display: block;
 }
 
+.task-direct-view {
+  min-height: 100vh;
+  background: #fff; /* Default background if task doesn't have one */
+}
+
+.task-rendered-content {
+  width: 100%;
+  min-height: 100vh;
+}
+
 .fab-back {
   position: fixed;
   top: 16px;
@@ -435,9 +441,9 @@ label {
   height: 44px;
   border-radius: 50%;
   border: none;
-  background: rgba(10, 10, 18, 0.85);
+  background: rgba(10, 10, 18, 0.85) !important;
   backdrop-filter: blur(10px);
-  color: #fff;
+  color: #fff !important;
   display: flex;
   align-items: center;
   justify-content: center;

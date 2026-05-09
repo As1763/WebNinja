@@ -73,29 +73,14 @@ function TaskView() {
     );
   }
 
-  // Function to extract font-family from the task HTML/CSS
-  const getFontUsed = (content) => {
-    if (!content) return 'Standard';
-    // Look for font-family in CSS or style attributes
-    const match = content.match(/font-family:\s*['"]?([^'";,]+)/i);
-    if (match && match[1]) {
-      return match[1].trim().split(',')[0].replace(/['"]/g, '');
-    }
-    // Check for old school <font face="...">
-    const fontTagMatch = content.match(/face=['"]?([^'"]+)/i);
-    if (fontTagMatch && fontTagMatch[1]) {
-      return fontTagMatch[1].trim();
-    }
-    return 'Default Sans';
-  };
-
   return (
-    <div className="task-fullscreen">
+    <div className="task-direct-view">
       {/* Floating Back Button - Auto hides */}
       <button 
         className={`fab-back ${showControls ? 'visible' : 'hidden'}`} 
         onClick={() => navigate('/')} 
         title="Back to Tasks"
+        style={{ zIndex: 10002 }}
       >
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <line x1="19" y1="12" x2="5" y2="12"></line>
@@ -107,6 +92,7 @@ function TaskView() {
       <div 
         className={`floating-info ${showControls ? 'visible' : ''}`}
         onMouseEnter={() => setShowControls(true)}
+        style={{ zIndex: 10002 }}
       >
         <div className="fi-main">
           <span className="fi-title">{task.title}</span>
@@ -114,26 +100,15 @@ function TaskView() {
             {task.difficulty}
           </span>
         </div>
-        <div className="fi-divider"></div>
-        <div className="fi-font">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="4 7 4 4 20 4 20 7"></polyline>
-            <line x1="9" y1="20" x2="15" y2="20"></line>
-            <line x1="12" y1="4" x2="12" y2="20"></line>
-          </svg>
-          <span>{getFontUsed(task.content)}</span>
-        </div>
       </div>
 
       {/* Hover zone to bring back the info bar */}
-      <div className="top-hover-zone" onMouseEnter={() => setShowControls(true)} />
+      <div className="top-hover-zone" onMouseEnter={() => setShowControls(true)} style={{ zIndex: 10001 }} />
 
-      {/* Full screen iframe - NO borders, NO padding, pure website feel */}
-      <iframe
-        srcDoc={task.content}
-        title={task.title}
-        className="fullscreen-iframe"
-        sandbox="allow-same-origin"
+      {/* Direct HTML Rendering - This allows WhatFont extension to work! */}
+      <div 
+        className="task-rendered-content"
+        dangerouslySetInnerHTML={{ __html: task.content }}
       />
     </div>
   );
