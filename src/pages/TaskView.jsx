@@ -73,28 +73,22 @@ function TaskView() {
     );
   }
 
-  const iframeRef = import('react').then(m => m.useRef(null)); // Using a ref for the iframe
-  const [frameReady, setFrameReady] = useState(false);
-
-  useEffect(() => {
-    const handleMessage = (event) => {
-      if (event.data.type === 'FRAME_READY') {
-        setFrameReady(true);
-      }
-    };
-    window.addEventListener('message', handleMessage);
-    return () => window.removeEventListener('message', handleMessage);
-  }, []);
-
-  useEffect(() => {
-    if (frameReady && task && document.getElementById('task-frame')) {
+  const handleIframeLoad = () => {
+    if (task && document.getElementById('task-frame')) {
       const iframe = document.getElementById('task-frame');
       iframe.contentWindow.postMessage({
         type: 'SET_CONTENT',
         content: task.content
       }, '*');
     }
-  }, [frameReady, task]);
+  };
+
+  useEffect(() => {
+    // Also try to send if task loads after iframe
+    if (task && document.getElementById('task-frame')) {
+      handleIframeLoad();
+    }
+  }, [task]);
 
   return (
     <div className="task-fullscreen">
@@ -132,6 +126,7 @@ function TaskView() {
       <iframe
         id="task-frame"
         src="/preview.html"
+        onLoad={handleIframeLoad}
         title={task.title}
         className="fullscreen-iframe"
         style={{ width: '100%', height: '100%', border: 'none' }}
