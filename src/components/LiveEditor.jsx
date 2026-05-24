@@ -38,9 +38,16 @@ const LiveEditor = ({ initialCode = '', title = 'Live Code Editor' }) => {
 
   // Highlight function for Editor
   const highlight = (code) => {
-    // Basic detection: if it contains <style> we use HTML highlighting, 
-    // but honestly Prism's HTML highlights CSS inside <style> tags anyway.
-    return Prism.highlight(code, Prism.languages.html, 'html');
+    try {
+      if (Prism && Prism.languages && (Prism.languages.html || Prism.languages.markup)) {
+        const lang = Prism.languages.html || Prism.languages.markup;
+        return Prism.highlight(code, lang, 'html');
+      }
+      return code;
+    } catch (e) {
+      console.error("Highlight error:", e);
+      return code;
+    }
   };
 
   return (
