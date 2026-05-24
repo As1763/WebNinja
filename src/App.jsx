@@ -4,6 +4,7 @@ import PublicPortal from './pages/PublicPortal';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import TaskView from './pages/TaskView';
+import CssTutorial from './pages/CssTutorial';
 import './index.css';
 
 function AppContent() {
@@ -14,6 +15,7 @@ function AppContent() {
     <div className={isTaskView ? "task-page-root" : "portal-theme"}>
       <Routes>
         <Route path="/" element={<PublicPortal />} />
+        <Route path="/css-tutorial" element={<CssTutorial />} />
         <Route path="/task/:taskId" element={<TaskView />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/login" element={<AdminLogin />} />

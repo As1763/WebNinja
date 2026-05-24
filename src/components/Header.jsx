@@ -1,13 +1,32 @@
 import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 const Header = () => {
+  const location = useLocation();
+
   return (
     <header className="header glass-panel">
       <div className="logo">
-        <h1>CodeNode</h1>
+        <Link to="/" style={{ textDecoration: 'none' }}>
+          <h1>CodeNode</h1>
+        </Link>
       </div>
-      <div className="nav">
-        <span style={{ color: 'var(--text-secondary)' }}>Welcome, Students</span>
+      <div className="nav-links">
+        <Link 
+          to="/" 
+          className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}
+        >
+          Daily Tasks
+        </Link>
+        <Link 
+          to="/css-tutorial" 
+          className={`nav-link ${location.pathname === '/css-tutorial' ? 'active' : ''}`}
+        >
+          CSS Syllabus
+        </Link>
+      </div>
+      <div className="user-profile">
+        <span style={{ color: 'var(--text-secondary)' }}>Welcome, Ninja</span>
       </div>
     </header>
   );
