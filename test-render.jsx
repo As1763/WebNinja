@@ -1,6 +1,13 @@
+import { JSDOM } from 'jsdom';
+const dom = new JSDOM('<!doctype html><html><body><div id="root"></div></body></html>', {
+  url: 'http://localhost/css-tutorial'
+});
+global.window = dom.window;
+global.document = dom.window.document;
+
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import { StaticRouter } from 'react-router-dom/server';
+import { StaticRouter } from 'react-router-dom';
 import CssTutorial from './src/pages/CssTutorial';
 
 try {

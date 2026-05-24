@@ -5,6 +5,7 @@ import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import TaskView from './pages/TaskView';
 import CssTutorial from './pages/CssTutorial';
+import ErrorBoundary from './components/ErrorBoundary';
 import './index.css';
 
 function AppContent() {
@@ -27,9 +28,11 @@ function AppContent() {
 
 function App() {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <ErrorBoundary>
+      <Router>
+        <AppContent />
+      </Router>
+    </ErrorBoundary>
   );
 }
 
