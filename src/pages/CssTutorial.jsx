@@ -21,32 +21,34 @@ function CssTutorial() {
   return (
     <>
       <Header />
-      <div className="tutorial-container">
-        {/* Sidebar Navigation */}
-        <aside className="tutorial-sidebar glass-panel">
-          <h3>Modules</h3>
-          <nav>
-            <ul className="tutorial-nav-list">
-              {cssSyllabus.map((module) => (
-                <li key={module.id}>
-                  <button
-                    className={`tutorial-nav-btn ${activeTab === module.id ? 'active' : ''}`}
-                    onClick={() => setActiveTab(module.id)}
-                  >
-                    {module.title}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </aside>
+      <div className="tutorial-vibrant-theme">
+        <div className="tutorial-container">
+          {/* Sidebar Navigation */}
+          <aside className="tutorial-sidebar glass-panel">
+            <h3>Modules</h3>
+            <nav>
+              <ul className="tutorial-nav-list">
+                {cssSyllabus.map((module) => (
+                  <li key={module.id}>
+                    <button
+                      className={`tutorial-nav-btn ${activeTab === module.id ? 'active' : ''}`}
+                      onClick={() => setActiveTab(module.id)}
+                    >
+                      {module.title}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </aside>
 
-        {/* Main Content Area */}
-        <main className="tutorial-main-content glass-panel" id="tutorial-content">
-          <div className="content-wrapper">
-            {renderContent()}
-          </div>
-        </main>
+          {/* Main Content Area */}
+          <main className="tutorial-main-content glass-panel" id="tutorial-content">
+            <div key={activeTab} className="content-wrapper fade-in-up">
+              {renderContent()}
+            </div>
+          </main>
+        </div>
       </div>
     </>
   );

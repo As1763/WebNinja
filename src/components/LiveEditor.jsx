@@ -64,10 +64,10 @@ const LiveEditor = ({ initialCode = '', title = 'Live Code Editor' }) => {
   return (
     <div className="live-editor-wrapper" style={{ 
       margin: '2rem 0', 
-      borderRadius: '8px', 
+      borderRadius: '12px', 
       overflow: 'hidden', 
-      border: '1px solid var(--border-color)',
-      boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+      border: '1px solid rgba(0, 0, 0, 0.1)',
+      boxShadow: '0 10px 30px rgba(0, 0, 0, 0.15)'
     }}>
       <div className="live-editor-header" style={{
         backgroundColor: '#1e1e1e',
