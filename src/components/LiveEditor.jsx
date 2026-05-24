@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Editor from 'react-simple-code-editor';
+import EditorModule from 'react-simple-code-editor';
+const Editor = EditorModule.default || EditorModule;
 import Prism from 'prismjs';
 import 'prismjs/components/prism-css';
 import 'prismjs/components/prism-markup'; // HTML
