@@ -8,6 +8,14 @@ import 'prismjs/themes/prism-twilight.css'; // Dark theme similar to VS code dar
 const LiveEditor = ({ initialCode = '', title = 'Live Code Editor' }) => {
   const [code, setCode] = useState(initialCode);
   const [srcDoc, setSrcDoc] = useState('');
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize(); // initial check
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Debounce the live preview update so it doesn't re-render on every single keystroke instantly
   useEffect(() => {
@@ -16,12 +24,14 @@ const LiveEditor = ({ initialCode = '', title = 'Live Code Editor' }) => {
       let fullHtml = code;
       if (!code.includes('<body>') && !code.includes('<html>')) {
         // Assume code is a mix of HTML and <style> tags
+        // We will just inject it into a body
         fullHtml = `
           <!DOCTYPE html>
           <html>
             <head>
+              <meta charset="utf-8">
               <style>
-                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 10px; margin: 0; }
+                body { font-family: system-ui, sans-serif; padding: 16px; margin: 0; }
               </style>
             </head>
             <body>
@@ -31,7 +41,7 @@ const LiveEditor = ({ initialCode = '', title = 'Live Code Editor' }) => {
         `;
       }
       setSrcDoc(fullHtml);
-    }, 250);
+    }, 500);
 
     return () => clearTimeout(timeout);
   }, [code]);
@@ -51,96 +61,53 @@ const LiveEditor = ({ initialCode = '', title = 'Live Code Editor' }) => {
   };
 
   return (
-    <div className="live-editor-wrapper" style={{
-      margin: '2rem 0',
-      border: '1px solid rgba(255, 255, 255, 0.1)',
-      borderRadius: '8px',
-      overflow: 'hidden',
-      backgroundColor: '#1e1e1e', // VS Code Dark+ background
-      boxShadow: '0 10px 30px rgba(0,0,0,0.5)'
+    <div className="live-editor-wrapper" style={{ 
+      margin: '2rem 0', 
+      borderRadius: '8px', 
+      overflow: 'hidden', 
+      border: '1px solid var(--border-color)',
+      boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
     }}>
-      <div style={{
-        background: '#2d2d2d',
-        padding: '0.5rem 1rem',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        borderBottom: '1px solid rgba(255,255,255,0.05)'
+      <div className="live-editor-header" style={{
+        backgroundColor: '#1e1e1e',
+        color: '#d4d4d4',
+        padding: '0.75rem 1rem',
+        fontFamily: 'monospace',
+        fontSize: '0.9rem',
+        borderBottom: '1px solid #333'
       }}>
-        <div style={{ display: 'flex', gap: '8px' }}>
-          <div style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: '#ff5f56' }} />
-          <div style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: '#ffbd2e' }} />
-          <div style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: '#27c93f' }} />
-        </div>
-        <span style={{ color: '#888', fontSize: '0.85rem', fontWeight: 500, fontFamily: 'sans-serif' }}>
-          {title} - (Editable)
-        </span>
-        <div style={{ width: 40 }}></div>
+        <span style={{ color: '#569cd6' }}>&lt;</span>
+        <span style={{ color: '#4ec9b0' }}>LiveEditor</span>
+        <span style={{ color: '#9cdcfe' }}> title</span>
+        <span style={{ color: '#d4d4d4' }}>=</span>
+        <span style={{ color: '#ce9178' }}>"{title}"</span>
+        <span style={{ color: '#569cd6' }}> /&gt;</span>
       </div>
-
-      <div style={{ display: 'flex', flexDirection: window.innerWidth < 768 ? 'column' : 'row' }}>
-        {/* Editor Pane */}
-        <div style={{
-          flex: 1,
-          borderRight: window.innerWidth < 768 ? 'none' : '1px solid rgba(255,255,255,0.1)',
-          borderBottom: window.innerWidth < 768 ? '1px solid rgba(255,255,255,0.1)' : 'none',
-          position: 'relative',
-          height: '400px',
-          overflowY: 'auto'
-        }}>
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            background: 'rgba(255,255,255,0.1)',
-            padding: '2px 8px',
-            fontSize: '11px',
-            color: '#ccc',
-            borderBottomLeftRadius: '4px',
-            zIndex: 10
-          }}>
-            HTML + CSS
-          </div>
+      
+      <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row' }}>
+        {/* Editor Area */}
+        <div style={{ flex: 1, backgroundColor: '#1e1e1e', position: 'relative', borderRight: isMobile ? 'none' : '1px solid #333', borderBottom: isMobile ? '1px solid #333' : 'none' }}>
           <Editor
             value={code}
             onValueChange={code => setCode(code)}
             highlight={highlight}
-            padding={15}
+            padding={16}
             style={{
               fontFamily: '"Fira Code", "Consolas", monospace',
               fontSize: 14,
+              minHeight: '200px',
               backgroundColor: '#1e1e1e',
-              minHeight: '100%',
               color: '#d4d4d4'
             }}
-            textareaClassName="editor-textarea"
           />
         </div>
 
-        {/* Preview Pane */}
-        <div style={{ flex: 1, height: '400px', backgroundColor: '#fff', position: 'relative' }}>
-           <div style={{
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            background: 'rgba(0,0,0,0.1)',
-            padding: '2px 8px',
-            fontSize: '11px',
-            color: '#333',
-            borderBottomLeftRadius: '4px',
-            zIndex: 10
-          }}>
-            Live Output
-          </div>
+        {/* Preview Area */}
+        <div style={{ flex: 1, backgroundColor: '#fff', minHeight: '200px', position: 'relative' }}>
           <iframe
             srcDoc={srcDoc}
-            title="live-preview"
-            style={{
-              width: '100%',
-              height: '100%',
-              border: 'none',
-              backgroundColor: '#ffffff'
-            }}
+            title="Live Preview"
+            style={{ width: '100%', height: '100%', border: 'none', minHeight: '200px' }}
             sandbox="allow-scripts"
           />
         </div>
