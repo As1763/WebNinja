@@ -72,17 +72,20 @@ const LiveEditor = ({ initialCode = '', title = 'Live Code Editor' }) => {
       <div className="live-editor-header" style={{
         backgroundColor: '#1e1e1e',
         color: '#d4d4d4',
-        padding: '0.75rem 1rem',
-        fontFamily: 'monospace',
-        fontSize: '0.9rem',
-        borderBottom: '1px solid #333'
+        padding: '0.6rem 1rem',
+        fontFamily: 'system-ui, sans-serif',
+        fontSize: '0.95rem',
+        fontWeight: '500',
+        borderBottom: '1px solid #333',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.5rem'
       }}>
-        <span style={{ color: '#569cd6' }}>&lt;</span>
-        <span style={{ color: '#4ec9b0' }}>LiveEditor</span>
-        <span style={{ color: '#9cdcfe' }}> title</span>
-        <span style={{ color: '#d4d4d4' }}>=</span>
-        <span style={{ color: '#ce9178' }}>"{title}"</span>
-        <span style={{ color: '#569cd6' }}> /&gt;</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ec9b0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="16 18 22 12 16 6"></polyline>
+          <polyline points="8 6 2 12 8 18"></polyline>
+        </svg>
+        <span style={{ color: '#e5e5e5' }}>{title}</span>
       </div>
       
       <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row' }}>
