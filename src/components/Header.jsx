@@ -24,6 +24,12 @@ const Header = () => {
         >
           CSS Syllabus
         </Link>
+        <Link 
+          to="/python-tutorial" 
+          className={`nav-link ${location.pathname === '/python-tutorial' ? 'active' : ''}`}
+        >
+          Python Syllabus
+        </Link>
       </div>
       <div className="user-profile">
         <span style={{ color: 'var(--text-secondary)' }}>Welcome, Ninja</span>

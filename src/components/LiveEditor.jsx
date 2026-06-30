@@ -5,8 +5,9 @@ import Prism from 'prismjs';
 import 'prismjs/components/prism-css';
 import 'prismjs/components/prism-markup'; // HTML
 import 'prismjs/themes/prism-twilight.css'; // Dark theme similar to VS code dark
+import 'prismjs/components/prism-python';
 
-const LiveEditor = ({ initialCode = '', title = 'Live Code Editor' }) => {
+const LiveEditor = ({ initialCode = '', title = 'Live Code Editor', language = 'html' }) => {
   const [code, setCode] = useState(initialCode);
   const [srcDoc, setSrcDoc] = useState('');
   const [viewMode, setViewMode] = useState('code'); // 'code' or 'preview'
@@ -14,25 +15,63 @@ const LiveEditor = ({ initialCode = '', title = 'Live Code Editor' }) => {
   // Debounce the live preview update so it doesn't re-render on every single keystroke instantly
   useEffect(() => {
     const timeout = setTimeout(() => {
-      // Wrap code in a basic HTML structure if it doesn't contain a full document
       let fullHtml = code;
-      if (!code.includes('<body>') && !code.includes('<html>')) {
-        // Assume code is a mix of HTML and <style> tags
+      
+      if (language === 'python') {
+        // Python execution via Brython
         fullHtml = `
           <!DOCTYPE html>
           <html>
             <head>
               <meta charset="utf-8">
+              <script src="https://cdn.jsdelivr.net/npm/brython@3.11.3/brython.min.js"></script>
+              <script src="https://cdn.jsdelivr.net/npm/brython@3.11.3/brython_stdlib.js"></script>
               <style>
-                body { font-family: system-ui, sans-serif; padding: 16px; margin: 0; }
+                body { background: #1e1e2e; color: #a6accd; font-family: 'Courier New', Courier, monospace; padding: 20px; margin: 0; white-space: pre-wrap; font-size: 15px; }
+                .error { color: #f07178; }
               </style>
             </head>
-            <body>
-              ${code}
+            <body onload="brython()">
+              <script type="text/python">
+import sys
+from browser import document, html
+
+def write(data):
+    document <= data
+
+def write_err(data):
+    span = html.SPAN(data, Class="error")
+    document <= span
+
+sys.stdout.write = write
+sys.stderr.write = write_err
+              </script>
+              <script type="text/python">
+${code}
+              </script>
             </body>
           </html>
         `;
+      } else {
+        // HTML/CSS Execution
+        if (!code.includes('<body>') && !code.includes('<html>')) {
+          fullHtml = `
+            <!DOCTYPE html>
+            <html>
+              <head>
+                <meta charset="utf-8">
+                <style>
+                  body { font-family: system-ui, sans-serif; padding: 16px; margin: 0; }
+                </style>
+              </head>
+              <body>
+                ${code}
+              </body>
+            </html>
+          `;
+        }
       }
+      
       setSrcDoc(fullHtml);
     }, 500);
 
@@ -42,6 +81,9 @@ const LiveEditor = ({ initialCode = '', title = 'Live Code Editor' }) => {
   // Highlight function for Editor
   const highlight = (code) => {
     try {
+      if (language === 'python') {
+        return Prism.highlight(code, Prism.languages.python, 'python');
+      }
       if (Prism && Prism.languages && (Prism.languages.html || Prism.languages.markup)) {
         const lang = Prism.languages.html || Prism.languages.markup;
         return Prism.highlight(code, lang, 'html');

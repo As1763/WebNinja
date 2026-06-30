@@ -5,6 +5,7 @@ import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import TaskView from './pages/TaskView';
 import CssTutorial from './pages/CssTutorial';
+import PythonTutorial from './pages/PythonTutorial';
 import ErrorBoundary from './components/ErrorBoundary';
 import './index.css';
 
@@ -17,6 +18,7 @@ function AppContent() {
       <Routes>
         <Route path="/" element={<PublicPortal />} />
         <Route path="/css-tutorial" element={<CssTutorial />} />
+        <Route path="/python-tutorial" element={<PythonTutorial />} />
         <Route path="/task/:taskId" element={<TaskView />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/login" element={<AdminLogin />} />
